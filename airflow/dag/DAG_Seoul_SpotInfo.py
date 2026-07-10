@@ -62,7 +62,7 @@ with DAG(
             ContentType="application/json"
         )
 
-call_api() >> get_spot_info_to_s3()
+
 
 
 
