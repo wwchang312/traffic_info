@@ -16,7 +16,7 @@ with DAG(
 
     @task
     def call_api(**context):
-        api_key =Variable.get('api_key')
+        api_key =Variable.get('seoul_api_key')
 
         #
         url = f'http://openapi.seoul.go.kr:8088/{api_key}/xml/SpotInfo/1/3'
