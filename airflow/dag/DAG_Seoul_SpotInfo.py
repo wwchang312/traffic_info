@@ -19,7 +19,7 @@ with DAG(
         api_key =Variable.get('api_key')
 
         #
-        url = f'http://openapi.seoul.go.kr:8088/{api_key}/xml/SpotInfo/1/5'
+        url = f'http://openapi.seoul.go.kr:8088/{api_key}/xml/SpotInfo/1/3'
 
         response = requests.get(url)
         # xml -> dic
