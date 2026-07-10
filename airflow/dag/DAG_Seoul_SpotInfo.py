@@ -43,8 +43,9 @@ with DAG(
         return data
 
     @task
-    def get_spot_info_to_s3(data:str,**context):
+    def get_spot_info_to_s3(**context):
         logical_date = context['logical_date'].strftime("%Y%m%d")
+        data = context['ti'].xcom_pull(task_ids='call_api')
 
         s3 = boto3.client(
             "s3",
