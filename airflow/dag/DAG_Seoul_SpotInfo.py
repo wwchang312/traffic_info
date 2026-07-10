@@ -4,6 +4,7 @@ from airflow.decorators import task
 import requests
 import xmltodict
 import boto3
+import json
 
 with DAG(
     dag_id='DAG_Seoul_SpotInfo',
@@ -57,7 +58,7 @@ with DAG(
         s3.put_object(
             Bucket="spot-info",
             Key=f"spot_name/{logical_date}_data.json",
-            Body=data,
+            Body=json.dumps(data,ensure_ascii=False).encode('utf-8'),
             ContentType="application/json"
         )
 
