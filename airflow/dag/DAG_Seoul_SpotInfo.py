@@ -11,7 +11,7 @@ with DAG(
     start_date=pendulum.datetime(2026, 6, 1,tz='Asia/Seoul'),
     tags=['서울시','지점정보'],
     description='서울시 교통량 지점 정보 호출 API',
-    catch_up= False
+    catchup= False
 ) as dag:
 
     @task
