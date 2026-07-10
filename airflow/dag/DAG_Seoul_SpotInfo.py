@@ -43,9 +43,8 @@ with DAG(
         return data
 
     @task
-    def get_spot_info_to_s3(**context):
+    def get_spot_info_to_s3(data:list[dict],**context):
         logical_date = context['logical_date'].strftime("%Y%m%d")
-        data = call_api()
 
         s3 = boto3.client(
             "s3",
@@ -63,7 +62,8 @@ with DAG(
         )
 
 
-    get_spot_info_to_s3()
+    call_api=call_api()
+    get_spot_info_to_s3(call_api)
 
 
 
