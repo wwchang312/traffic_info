@@ -4,3 +4,4 @@ numpy
 pendulum
 boto3
 pandas
+folium
