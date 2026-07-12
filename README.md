@@ -5,7 +5,7 @@
 ## Tech Stack
 
 ### Data Orchestration
-- Apache Airflow
+- Apache Airflow (3.1.7)
 
 ### Data Processing
 - Pandas
@@ -55,5 +55,23 @@ postgres에는 spot_info 테이블과 traffic_vol 테이블을 조인하여 View
 
 
 seoul_traffic_volumes_map는 이 View를 참조하여 서울 교통 지점별 교통량을 표시하는 시각화 자료를 streamlit를 이용해서 나타낸다.
+
+
+### sql 쿼리문
+
+## create_table.sql
+해당 프로젝트에 필요한 테이블을 생성하는 쿼리문
+
+## sp_merge_staging_to_target.sql
+스테이징 테이블에서 타겟 테이블로 데이터를 적재하는 프로시저
+MERGE문을 활용하며, 스테이징이 완료되면 스테이징 테이블의 데이터를 삭제한다.
+
+
+## S3 객체 스토리지
+
+객체 스토리지에는 S3가 호환되는 Minio를 사용했다.
+DAG이 한번 수행이 될때마다 API의 리턴 데이터 중, value값에 해당하는 것을 json 형식으로 덤핑하여 저장한다.
+<img width="1719" height="524" alt="image" src="https://github.com/user-attachments/assets/c146d6cb-6abb-4e75-a155-3577ae53a331" />
+
 
 
