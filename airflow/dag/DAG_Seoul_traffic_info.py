@@ -38,16 +38,6 @@ with DAG(
 
         engine = postgres_hook.get_sqlalchemy_engine()
 
-        try:
-            with engine.connect() as conn:
-                result = conn.execute(text("SELECT 1"))
-                print("DB 연결 성공:", result.scalar())
-        except Exception as e:
-            print("DB 연결 실패")
-            print("예외 타입:", type(e).__name__)
-            print("예외 내용:", repr(e))
-            raise
-
         df.to_sql(
             name='stg_traffic',
             con=engine,
