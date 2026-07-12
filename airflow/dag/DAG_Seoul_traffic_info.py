@@ -1,8 +1,7 @@
-from airflow.sdk import DAG,Variable
+from airflow.sdk import DAG,Variable,task
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 import pendulum
-from airflow.decorators import task
 import pandas as pd
 import requests
 import xmltodict
@@ -32,6 +31,10 @@ with DAG(
     @task
     def staging_data_postgres(list_dic,**context):
         df = pd.DataFrame(list_dic)
+        for col in df.select_dtypes(include="object").columns:
+            df[col] = df[col].apply(
+                lambda x: x.decode("cp949") if isinstance(x, bytes) else x
+            )
         postgres_hook = PostgresHook(
             postgres_conn_id='postgres_connection'
         )
