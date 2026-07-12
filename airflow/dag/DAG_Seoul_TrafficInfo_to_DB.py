@@ -66,3 +66,4 @@ with DAG(
 
     json_data = load_json_data()
     staging_data_postgres(json_data)
+    load_staging()
