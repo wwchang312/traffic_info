@@ -20,7 +20,7 @@ with DAG(
 
     content = hook.read_key(
         bucket_name="spot-info",
-        key="spot_name/20260710_data.json",
+        key="spot_name/20260710_data.json"
     )
 
     spot_list = json.loads(content)
