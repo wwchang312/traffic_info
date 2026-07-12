@@ -5,3 +5,8 @@ pendulum
 boto3
 pandas
 folium
+streamlit
+sqlalchemy
+streamlit_folium
+psycopg2-binary
+python-dotenv
