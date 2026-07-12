@@ -38,4 +38,22 @@
 
 
 ## 프로젝트 구성
+<img width="1774" height="887" alt="Image" src="https://github.com/user-attachments/assets/14af9f79-d24b-4e1d-8d79-f5518fad54b2" />
+
+
+
+DAG_Seoul_SpotInfo.py는 서울시 교통량 지점 정보를 호출하고 이를 객체 스토리지인 Minio 버켓에 저장한다.
+DAG_Seoul_SpotInfo_to_DB.py는 Minio에서 원본 데이터를 읽어 스테이징 테이블에 적재하고, 스테이징 테이블에 있는 데이터를 타겟 테이블로 적재하는 역할을 한다.
+
+이와 동일하게 
+DAG_Seoul_TrafficInfo.py는 서울시 교통량 이력 정보를 호출하고 이를 객체 스토리지인 Minio버켓에 저장한다.
+DAG_Seoul_TrafficInfo_to_DB.py는 Minio에서 원본 데이터를 읽어 스테이징 테이블에 적재하고, 스테이징 테이블에 있는 데이터를 타겟 테이블로 적재하는 역할을 한다.
+
+
+postgres에는 spot_info 테이블과 traffic_vol 테이블을 조인하여 View (vw_traffic_info)를 생성한다.
+
+
+
+seoul_traffic_volumes_map는 이 View를 참조하여 서울 교통 지점별 교통량을 표시하는 시각화 자료를 streamlit를 이용해서 나타낸다.
+
 
