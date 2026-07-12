@@ -25,6 +25,7 @@ with DAG(
             key='spot_name/20260710_data.json'
         )
         spot_list = json.loads(content)
+
         return spot_list
 
     minio_task = minio_connect()
