@@ -18,6 +18,9 @@ with DAG(
 
     hook = S3Hook(aws_conn_id='minio_connection')
 
+    client = hook.get_conn()
+    print("endpoint:", client.meta.endpoint_url)
+
     content = hook.read_key(
         bucket_name="spot-info",
         key="spot_name/20260710_data.json"
