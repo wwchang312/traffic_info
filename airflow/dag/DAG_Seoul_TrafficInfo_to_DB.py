@@ -65,5 +65,7 @@ with DAG(
 
 
     json_data = load_json_data()
-    staging_data_postgres(json_data)
-    load_staging()
+    staging_task=staging_data_postgres(json_data)
+    load_task=load_staging()
+
+    staging_task >> load_task
