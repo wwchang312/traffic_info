@@ -3,3 +3,4 @@ xmltodict
 numpy
 pendulum
 boto3
+pandas
