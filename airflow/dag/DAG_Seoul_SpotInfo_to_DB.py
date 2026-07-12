@@ -3,9 +3,6 @@ from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 import pendulum
 import pandas as pd
-import requests
-import xmltodict
-import boto3
 import json
 
 with DAG(
