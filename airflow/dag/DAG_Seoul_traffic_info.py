@@ -29,4 +29,4 @@ with DAG(
     # spot_list = json.loads(content)
 
 
-    print(spot_list)
+    # print(spot_list)
