@@ -2,6 +2,7 @@ from airflow.sdk import DAG,Variable
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 import pendulum
 from airflow.decorators import task
+import pandas as pd
 import requests
 import xmltodict
 import boto3
@@ -28,6 +29,14 @@ with DAG(
 
         return spot_list
 
-    minio_task = minio_connect()
+    @task
+    def change_dataframe(list_dic,**context):
 
+        df= pd.DataFrame(list_dic)
+
+        return df
+
+
+    minio_task = minio_connect()
+    change_dataframe(minio_task)
 
