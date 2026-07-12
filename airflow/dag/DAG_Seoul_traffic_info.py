@@ -1,5 +1,6 @@
 from airflow.sdk import DAG,Variable
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
+from airflow.providers.postgres.hooks.postgres import PostgresHook
 import pendulum
 from airflow.decorators import task
 import pandas as pd
@@ -18,10 +19,9 @@ with DAG(
 ) as dag:
 
     @task
-    def minio_connect():
-        hook = S3Hook(aws_conn_id='minio_connection')
-
-        content=hook.read_key(
+    def load_json_data():
+        s3_hook = S3Hook(aws_conn_id='minio_connection')
+        content=s3_hook.read_key(
             bucket_name='spot-info',
             key='spot_name/20260710_data.json'
         )
@@ -36,7 +36,25 @@ with DAG(
 
         return df
 
+    @task
+    def staging_data_postgres(df,**context):
 
-    minio_task = minio_connect()
-    change_dataframe(minio_task)
+        postgres_hook = PostgresHook(
+            postgres_conn_id='postgres_connection'
+        )
 
+        engine = postgres_hook.get_sqlalchemy_engine()
+
+        df.to_sql(
+            name='stg_traffic',
+            con=engine,
+            schema='public',
+            if_exists='append',
+            index=False,
+            chunksize=1000,
+            method='multi',
+        )
+
+    json_data = load_json_data()
+    df=change_dataframe(json_data)
+    staging_data_postgres(df)
