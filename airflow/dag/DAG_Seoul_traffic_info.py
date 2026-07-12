@@ -21,12 +21,12 @@ with DAG(
     client = hook.get_conn()
     print("endpoint:", client.meta.endpoint_url)
 
-    content = hook.read_key(
-        bucket_name="spot-info",
-        key="spot_name/20260710_data.json"
-    )
-
-    spot_list = json.loads(content)
+    # content = hook.read_key(
+    #     bucket_name="spot-info",
+    #     key="spot_name/20260710_data.json"
+    # )
+    #
+    # spot_list = json.loads(content)
 
 
     print(spot_list)
