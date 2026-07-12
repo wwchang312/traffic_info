@@ -8,8 +8,8 @@ import json
 
 with DAG(
     dag_id='DAG_Seoul_SpotInfo',
-    schedule=None,
-    start_date=pendulum.datetime(2026, 6, 1,tz='Asia/Seoul'),
+    schedule="0 0 * * *",
+    start_date=pendulum.datetime(2026, 7, 1,tz='Asia/Seoul'),
     tags=['서울시','지점정보'],
     description='서울시 교통량 지점 정보 호출 API',
     catchup= False
