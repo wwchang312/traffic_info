@@ -31,15 +31,22 @@ with DAG(
     @task
     def staging_data_postgres(list_dic,**context):
         df = pd.DataFrame(list_dic)
-        for col in df.select_dtypes(include="object").columns:
-            df[col] = df[col].apply(
-                lambda x: x.decode("cp949") if isinstance(x, bytes) else x
-            )
+
         postgres_hook = PostgresHook(
             postgres_conn_id='postgres_connection'
         )
 
         engine = postgres_hook.get_sqlalchemy_engine()
+
+        try:
+            with engine.connect() as conn:
+                result = conn.execute(text("SELECT 1"))
+                print("DB 연결 성공:", result.scalar())
+        except Exception as e:
+            print("DB 연결 실패")
+            print("예외 타입:", type(e).__name__)
+            print("예외 내용:", repr(e))
+            raise
 
         df.to_sql(
             name='stg_traffic',
