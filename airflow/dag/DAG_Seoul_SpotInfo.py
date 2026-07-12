@@ -1,9 +1,8 @@
-from airflow.sdk import DAG,Variable
+from airflow.sdk import DAG,Variable,task
+from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 import pendulum
-from airflow.decorators import task
 import requests
 import xmltodict
-import boto3
 import json
 
 with DAG(
@@ -47,19 +46,15 @@ with DAG(
     def get_spot_info_to_s3(data:list[dict],**context):
         logical_date = context['logical_date'].strftime("%Y%m%d")
 
-        s3 = boto3.client(
-            "s3",
-            endpoint_url="http://minio:9000",
-            aws_access_key_id=Variable.get("minio-access-key"),
-            aws_secret_access_key=Variable.get("minio-secret-key")
-        )
+        s3_hook = S3Hook(aws_conn_id="minio_connection")
 
-        # MinIO 저장
-        s3.put_object(
-            Bucket="spot-info",
-            Key=f"spot_name/{logical_date}_data.json",
-            Body=json.dumps(data,ensure_ascii=False).encode('utf-8'),
-            ContentType="application/json"
+        content = json.dumps(data, ensure_ascii=False)
+
+        s3_hook.load_string(
+            string_data=content,
+            bucket_name="spot-info",
+            key=f'spot_name/{logical_date}_data.json',
+            replace=True,
         )
 
 
