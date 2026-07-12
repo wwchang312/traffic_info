@@ -9,20 +9,21 @@ import boto3
 import json
 
 with DAG(
-    dag_id='DAG_Seoul_traffic_info',
-    schedule=None,
-    start_date=pendulum.datetime(2026, 6, 1,tz='Asia/Seoul'),
-    tags=['서울시','교통량'],
-    description='서울시 교통량 정보 호출 API',
+    dag_id='DAG_Seoul_SpotInfo_to_DB',
+    schedule="1 0 * * *",
+    start_date=pendulum.datetime(2026, 7, 1,tz='Asia/Seoul'),
+    tags=['서울시 지점정보','데이터 적재'],
+    description='서울시 교통지점정보 호출 API',
     catchup= False
 ) as dag:
 
     @task
-    def load_json_data():
+    def load_json_data(**context):
+        logical_date = context['logical_date'].strftime("%Y%m%d")
         s3_hook = S3Hook(aws_conn_id='minio_connection')
         content=s3_hook.read_key(
             bucket_name='spot-info',
-            key='spot_name/20260710_data.json'
+            key=f'spot_name/{logical_date}_data.json'
         )
         spot_list = json.loads(content)
 
@@ -39,7 +40,7 @@ with DAG(
         engine = postgres_hook.get_sqlalchemy_engine()
 
         df.to_sql(
-            name='stg_traffic',
+            name='stg_spot_info',
             con=engine,
             schema='public',
             if_exists='append',
