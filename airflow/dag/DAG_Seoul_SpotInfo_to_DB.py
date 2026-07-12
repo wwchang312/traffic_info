@@ -46,5 +46,22 @@ with DAG(
             method='multi',
         )
 
+
+    @task
+    def load_staging():
+        postgres_hook = PostgresHook(
+            postgres_conn_id='postgres_connection'
+        )
+
+        postgres_hook.run(
+            """
+            CALL public.merge_staging_to_target('spot_info');
+            """
+        )
+
+
     json_data = load_json_data()
-    staging_data_postgres(json_data)
+    staging_task = staging_data_postgres(json_data)
+    load_task = load_staging()
+
+    staging_task >> load_task
