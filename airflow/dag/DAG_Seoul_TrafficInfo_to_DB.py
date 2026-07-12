@@ -7,7 +7,7 @@ import json
 
 with DAG(
     dag_id='DAG_Seoul_TrafficInfo_to_DB',
-    schedule="10 * * * *",
+    schedule="11 * * * *",
     start_date=pendulum.datetime(2026, 7, 1,tz='Asia/Seoul'),
     tags=['서울시','데이터 적재','교통량'],
     description='서울시 교통량 이력정보 호출 데이터 DB 적재',
