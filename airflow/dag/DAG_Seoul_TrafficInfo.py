@@ -88,7 +88,7 @@ with DAG(
 
 
     spot_num_lst=get_spot_num_list()
-    data=call_api(spot_num_lst)
+    data=call_api.expand(spot_num=spot_num_lst)
     save_json_data(data)
 
 
