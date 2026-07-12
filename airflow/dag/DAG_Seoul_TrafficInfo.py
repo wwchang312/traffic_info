@@ -37,10 +37,11 @@ with DAG(
     def call_api(spot_num,**context):
         api_key =Variable.get('seoul_api_key')
 
-        logical_date = context["logical_date"].in_timezone("Asia/Seoul")
+        # 날짜 및 시간 Param
+        logical_date = context["logical_date"].in_timezone("Asia/Seoul").subtract(hours=1)  # 한시간 이전의 교통량을 수집해야한다.
 
         date_param = logical_date.strftime("%Y%m%d")
-        hour_param = logical_date.subtract(hours=1).strftime("%H")
+        hour_param = logical_date.strftime("%H")
 
         # api 호출 url 작성
         url = f'http://openapi.seoul.go.kr:8088/{api_key}/xml/VolInfo/1/5/{spot_num}/{date_param}/{hour_param}'
@@ -70,14 +71,17 @@ with DAG(
 
     @task
     def save_json_data(data, **context):
-        logical_date = context["logical_date"].in_timezone("Asia/Seoul")
+        data_list = list(data)
+
+        #객체 저장 위치를 만들기 위한 날짜 및 시간 Param
+        logical_date = context["logical_date"].in_timezone("Asia/Seoul").subtract(hours=1) #한시간 이전의 교통량을 수집해야한다.
 
         date_param = logical_date.strftime("%Y%m%d")
-        hour_param = logical_date.subtract(hours=1).strftime("%H") #한시간 이전의 교통량을 수집해야한다.
+        hour_param = logical_date.strftime("%H")
 
         s3_hook = S3Hook(aws_conn_id="minio_connection")
 
-        content = json.dumps(data,ensure_ascii=False)
+        content = json.dumps(data_list,ensure_ascii=False)
 
         s3_hook.load_string(
             string_data=content,
