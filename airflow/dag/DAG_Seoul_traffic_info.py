@@ -30,15 +30,8 @@ with DAG(
         return spot_list
 
     @task
-    def change_dataframe(list_dic,**context):
-
-        df= pd.DataFrame(list_dic)
-
-        return df
-
-    @task
-    def staging_data_postgres(df,**context):
-
+    def staging_data_postgres(list_dic,**context):
+        df = pd.DataFrame(list_dic)
         postgres_hook = PostgresHook(
             postgres_conn_id='postgres_connection'
         )
@@ -56,5 +49,4 @@ with DAG(
         )
 
     json_data = load_json_data()
-    df=change_dataframe(json_data)
-    staging_data_postgres(df)
+    staging_data_postgres(json_data)
