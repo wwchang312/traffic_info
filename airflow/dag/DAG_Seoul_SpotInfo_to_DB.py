@@ -13,7 +13,7 @@ with DAG(
     schedule="1 0 * * *",
     start_date=pendulum.datetime(2026, 7, 1,tz='Asia/Seoul'),
     tags=['서울시 지점정보','데이터 적재'],
-    description='서울시 교통지점정보 호출 API',
+    description='서울시 교통지점정보 DB 적재 DAG',
     catchup= False
 ) as dag:
 
