@@ -23,13 +23,13 @@ with DAG(
     #     client = hook.get_conn()
     #     print("endpoint:", client.meta.endpoint_url)
 
-    @task
+    @task(task_id="test_minio_connect")
     def minio_connect():
         print("task started")
         return "success"
 
 
-    minio_connect()
+    minio_task = minio_connect()
 
 
     # content = hook.read_key(
