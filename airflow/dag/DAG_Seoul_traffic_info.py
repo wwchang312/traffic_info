@@ -16,17 +16,12 @@ with DAG(
     catchup= False
 ) as dag:
 
-    # @task
-    # def minio_connect():
-    #     hook = S3Hook(aws_conn_id='minio_connection')
-    #
-    #     client = hook.get_conn()
-    #     print("endpoint:", client.meta.endpoint_url)
-
-    @task(task_id="test_minio_connect")
+    @task
     def minio_connect():
-        print("task started")
-        return "success"
+         hook = S3Hook(aws_conn_id='minio_connection')
+
+         client = hook.get_conn()
+         return f"endpoint:{client.meta.endpoint_url}"
 
 
     minio_task = minio_connect()
