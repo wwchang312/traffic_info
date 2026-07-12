@@ -73,6 +73,9 @@ with DAG(
     def save_json_data(data, **context):
         data_list = list(data)
 
+        merged_data=[row for spot_rows in data_list for row in spot_rows]
+
+
         #객체 저장 위치를 만들기 위한 날짜 및 시간 Param
         logical_date = context["logical_date"].in_timezone("Asia/Seoul").subtract(hours=1) #한시간 이전의 교통량을 수집해야한다.
 
@@ -81,7 +84,7 @@ with DAG(
 
         s3_hook = S3Hook(aws_conn_id="minio_connection")
 
-        content = json.dumps(data_list,ensure_ascii=False)
+        content = json.dumps(merged_data,ensure_ascii=False)
 
         s3_hook.load_string(
             string_data=content,
