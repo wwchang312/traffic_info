@@ -1,4 +1,4 @@
-from airflow.sdk import DAG,Variable,task
+from airflow.sdk import DAG,Variable,task,Param
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 import pendulum
@@ -40,7 +40,7 @@ with DAG(
         logical_date = context["logical_date"].in_timezone("Asia/Seoul")
 
         date_param = logical_date.strftime("%Y%m%d")
-        hour_param = logical_date.strftime("%H")
+        hour_param = logical_date.subtract(hours=1).strftime("%H")
 
         # api 호출 url 작성
         url = f'http://openapi.seoul.go.kr:8088/{api_key}/xml/VolInfo/1/5/{spot_num}/{date_param}/{hour_param}'
@@ -73,7 +73,7 @@ with DAG(
         logical_date = context["logical_date"].in_timezone("Asia/Seoul")
 
         date_param = logical_date.strftime("%Y%m%d")
-        hour_param = logical_date.strftime("%H")
+        hour_param = logical_date.subtract(hours=1).strftime("%H") #한시간 이전의 교통량을 수집해야한다.
 
         s3_hook = S3Hook(aws_conn_id="minio_connection")
 
