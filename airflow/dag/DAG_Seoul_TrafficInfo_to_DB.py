@@ -7,7 +7,7 @@ import json
 
 with DAG(
     dag_id='DAG_Seoul_TrafficInfo_to_DB',
-    schedule="1 0 * * *",
+    schedule="10 0 * * *",
     start_date=pendulum.datetime(2026, 7, 1,tz='Asia/Seoul'),
     tags=['서울시','데이터 적재','교통량'],
     description='서울시 교통량 이력정보 호출 데이터 DB 적재',
@@ -16,10 +16,10 @@ with DAG(
 
     @task
     def load_json_data(**context):
-        logical_date = context["logical_date"].in_timezone("Asia/Seoul")
+        logical_date = context["logical_date"].in_timezone("Asia/Seoul").subtract(hours=1)
 
         date_param = logical_date.strftime("%Y%m%d")
-        hour_param = logical_date.subtract(hours=1).strftime("%H")
+        hour_param = logical_date.strftime("%H")
 
 
         s3_hook = S3Hook(aws_conn_id='minio_connection')
