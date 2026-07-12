@@ -16,10 +16,12 @@ with DAG(
     catchup= False
 ) as dag:
 
-    hook = S3Hook(aws_conn_id='minio_connection')
+    @task
+    def minio_connect():
+        hook = S3Hook(aws_conn_id='minio_connection')
 
-    client = hook.get_conn()
-    print("endpoint:", client.meta.endpoint_url)
+        client = hook.get_conn()
+        print("endpoint:", client.meta.endpoint_url)
 
     # content = hook.read_key(
     #     bucket_name="spot-info",
@@ -30,3 +32,5 @@ with DAG(
 
 
     # print(spot_list)
+
+    minio_connect()
